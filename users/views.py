@@ -12,7 +12,7 @@ from .models import Seller
 import hashlib
 from joblib import load
 # Load the trained model
-model = load('path_to_your_model/model.pkl')
+model = load('./model.pkl')
 class BuyerView(generics.GenericAPIView):
     serializer_class=BuyerSerializer
     def post(self, request, *args, **kwargs):
@@ -117,22 +117,26 @@ class ProductBySellerListView(generics.ListAPIView):
         queryset = self.get_queryset()
         return Response(queryset)
     # ML Model Code
+def hash_user_id(user_id):
+    hash_object = hashlib.md5(user_id.encode())
+    hash_digest = hash_object.hexdigest()
+    hash_int = int(hash_digest, 16)
+    return hash_int
+
 class DetectDuplicateSellerAccounts(generics.ListAPIView):
     serializer_class = SellerSerializer
-    # permission_classes = [permissions.IsAuthenticated]
-
     def get_queryset(self):
-        # Get all seller accounts data
         duplicate_accounts = []
         sellers = Seller.objects.all()
         for seller in sellers:
-            # print("The all sellers are:",seller.id_card)
-            # Hash the ID card number for consistency with training data
             if seller.id_card is not None:
-                 user_id_hash = hashlib.md5(seller.id_card.encode()).hexdigest()
-                  # Predict with the trained model
-                 is_duplicate = model.predict([[user_id_hash]])[0]
-                 if is_duplicate:
-                     duplicate_accounts.append(seller)
-                 print("The hash user id is:",user_id_hash)
+                user_id_hash = hash_user_id(seller.id_card)
+                user_id_hash_normalized = user_id_hash / (10 ** 38)  # Normalize the hash to a float within a reasonable range
+                try:
+                    is_duplicate = model.predict([[user_id_hash_normalized]])[0]
+                    if is_duplicate:
+                        duplicate_accounts.append(seller)
+                    print("The hash user id is:", user_id_hash)
+                except Exception as e:
+                    print(f"Error predicting for seller {seller.id}: {e}")
         return duplicate_accounts
