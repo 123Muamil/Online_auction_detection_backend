@@ -17,14 +17,14 @@ class SellerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2', 'name', 'id_card', 'phone_number', 'address', 'date_of_birth']
+        fields = [ 'email', 'password', 'password2', 'name', 'id_card', 'phone_number', 'address', 'date_of_birth']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def save(self, **kwargs):
         user = User(
-            username=self.validated_data['username'],
+            # username=self.validated_data['username'],
             email=self.validated_data['email']
         )
         password = self.validated_data['password']

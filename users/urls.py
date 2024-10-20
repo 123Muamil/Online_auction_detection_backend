@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import AllUsersView, BuyerView,SellerView,CustomAuthToken,BuyerOnlyView,SellerOnlyView,ProductCreateView,ProductRetrieveUpdateDestroyView,ProductListView,AllUsersView,ProductBySellerListView,DetectDuplicateSellerAccounts
+from .views import AllUsersView,DuplicateSellerCheckView, BuyerView,SellerView,CustomAuthToken,BuyerOnlyView,SellerOnlyView,ProductCreateView,ProductRetrieveUpdateDestroyView,ProductListView,AllUsersView,ProductBySellerListView,DetectDuplicateSellerAccounts
 from django.conf.urls.static import static
 from django.conf import settings
 urlpatterns = [
@@ -13,7 +13,8 @@ urlpatterns = [
       path('all-products/', ProductListView.as_view(), name='all-products'),
       path('users/', AllUsersView.as_view(), name='all_users'),
       path('by-seller/', ProductBySellerListView.as_view(), name='products-by-seller'),
-       path('detect_duplicate_sellers/', DetectDuplicateSellerAccounts.as_view(), name='detect_duplicate_sellers'),
+      path('detect_duplicate_sellers/', DetectDuplicateSellerAccounts.as_view(), name='detect_duplicate_sellers'),
+      path('check-duplicates/', DuplicateSellerCheckView.as_view(), name='check-duplicates'),
 ]
 # Serve media files during development
 
