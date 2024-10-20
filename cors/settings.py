@@ -29,9 +29,12 @@ SECRET_KEY = 'django-insecure-5f#6cr8xsgv94v(qtkpdb$3645328&uewnt4sr(i(u9i163%dd
 DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app','.now.sh','127.0.0.1','localhost']
+CORS_ALLOWED_ORIGINS = [
+    'https://online-auction-detection.netlify.app',  
+]
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
 INSTALLED_APPS = [
@@ -89,14 +92,24 @@ WSGI_APPLICATION = 'cors.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'online_auction',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST':'localhost',
+#         'PORT':'3306',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'online_auction',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST':'localhost',
-        'PORT':'3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'verceldb',  # Your database name
+        'USER': 'default',          # Your username
+        'PASSWORD': 'uvcaT8S5txKz', # Your password
+        'HOST': 'ep-plain-snowflake-a47vmhdq-pooler.us-east-1.aws.neon.tech',  # Your host
+        'PORT': '5432',             # Default PostgreSQL port
     }
 }
 
